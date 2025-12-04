@@ -22,7 +22,7 @@ app = Flask(__name__)
 @app.before_request
 def log_request():
     if request.method == 'POST':
-        print(f"Received POST request to {request.url}")
+        print(f"Recebi uma solicitação POST para {request.url}")
         print("Headers:", dict(request.headers))
         try:
             if request.is_json:
@@ -32,17 +32,17 @@ def log_request():
             elif request.data:
                 print("Raw data:", request.data.decode('utf-8'))
         except Exception as e:
-            print(f"Error parsing request body: {e}")
+            print(f"Erro ao analisar o request body: {e}")
 
 @app.route('/lic', methods=['POST'])
 def handle_lic():
-    print("Received POST /lic request")
+    print("Recebido POST /lic request")
     
     file_path = os.path.join(os.getcwd(), "lic.cr")
     
     if not os.path.exists(file_path):
-        print("File not found:", file_path)
-        return "File not found", HTTPStatus.NOT_FOUND
+        print("Arquivo não existe:", file_path)
+        return "Arquivo não existe", HTTPStatus.NOT_FOUND
     
     if request.form:
         print("Form data:", request.form.to_dict())
@@ -51,7 +51,7 @@ def handle_lic():
 
 @app.route('/')
 def index():
-    return "Welcome to the license server!"
+    return "Bem-vindo ao servidor de licenças!"
 
 # Ensure certificates exist
 def generate_certificates():
@@ -71,23 +71,23 @@ def update_hosts():
             hosts_file.seek(0)
             hosts_file.truncate()
             
-            # Remove existing domain entries
+            # Remover entradas de domínio existentes
             lines = [line for line in lines if DOMAIN not in line and DOMAIN2 not in line]
             
-            # Append new domain mappings
+            # Adicionar novos mapeamentos de domínio
             lines.append(f"{IP_ADDRESS} {DOMAIN}\n")
             lines.append(f"{IP_ADDRESS} {DOMAIN2}\n")
             
             hosts_file.writelines(lines)
-            print(f"Successfully mapped {DOMAIN} to {IP_ADDRESS} in {HOSTS_PATH}")
-            print(f"Successfully mapped {DOMAIN2} to {IP_ADDRESS} in {HOSTS_PATH}")
+            print(f"Mapeamento realizado com sucesso de {DOMAIN} para {IP_ADDRESS} em {HOSTS_PATH}")
+            print(f"Mapeamento realizado com sucesso de {DOMAIN2} para {IP_ADDRESS} em {HOSTS_PATH}")
     except Exception as e:
-        print(f"Error updating hosts file: {e}")
+        print(f"Erro ao atualizar o arquivo hosts: {e}")
 
 def run_http_server():
     handler = http.server.SimpleHTTPRequestHandler
     with socketserver.TCPServer(("", PORT_HTTP), handler) as httpd:
-        print(f"HTTP server running on port {PORT_HTTP}")
+        print(f"Servidor HTTP em execução na porta {PORT_HTTP}")
         httpd.serve_forever()
 
 def run_https_server():
@@ -95,7 +95,7 @@ def run_https_server():
     handler = http.server.SimpleHTTPRequestHandler
     httpd = socketserver.TCPServer(("", PORT_HTTPS), handler)
     httpd.socket = ssl.wrap_socket(httpd.socket, keyfile=KEY_FILE, certfile=CERT_FILE, server_side=True)
-    print(f"HTTPS server running on port {PORT_HTTPS}")
+    print(f"Servidor HTTPS em execução na porta {PORT_HTTPS}")
     httpd.serve_forever()
 
 if __name__ == "__main__":
