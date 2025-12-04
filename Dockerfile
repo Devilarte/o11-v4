@@ -39,7 +39,7 @@ RUN mkdir -p \
 
 COPY server.js server.py run.sh o11.cfg o11v4 lic.cr /home/o11/
 
-# Ensure Unix line endings for run.sh
+# Garantir que as quebras de linha Unix sejam usadas para run.sh
 RUN sed -i 's/\r$//' /home/o11/run.sh
 
 RUN chmod 755 /home/o11/run.sh
@@ -53,20 +53,20 @@ RUN mkdir -p /home/o11/certs && \
 
 RUN cat <<'EOF' > /home/o11/start.sh
 #!/bin/bash
-# Check if IP_ADDRESS is provided
+# Checando se IP_ADDRESS foi fornecido
 if [ -z "$IP_ADDRESS" ]; then
-    echo "Error: IP_ADDRESS environment variable is not set"
+    echo "Erro: A variável IP_ADDRESS não foi definida."
     exit 1
 fi
 
-# Update IP address in server files
+# Atualizar IP nos arquivos do servidor
 sed -i "s/const ipAddress = ''/const ipAddress = '$IP_ADDRESS'/g" /home/o11/server.js
 sed -i "s/IP_ADDRESS = \"\"/IP_ADDRESS = \"$IP_ADDRESS\"/g" /home/o11/server.py
 
-# Create directories needed by run.sh
+# Crie os diretórios necessários para run.sh
 mkdir -p /home/o11/hls /home/o11/dl
 
-# Start the license server (choose one)
+# Opções para iniciar o servidor
 if [ "$SERVER_TYPE" = "python" ]; then
   pm2 start server.py --name licserver --interpreter python3
 else
@@ -80,7 +80,7 @@ nohup ./run.sh > /dev/null 2>&1 &
 pm2 logs
 EOF
 
-# Ensure Unix line endings
+# Garantir que as quebras de linha Unix sejam usadas para start.sh
 RUN sed -i 's/\r$//' /home/o11/start.sh
 
 RUN chmod 755 /home/o11/start.sh
