@@ -2,75 +2,75 @@
 
 **o11-v4 Docker Deployment**
 
-A simple Dockerized application to run the o11-v4 using Node.js or Python.
+Uma aplicação Docker para executar o o11-v4 usando Node.js ou Python.
 </div>
 
-## Prerequisites
+## Pré-requisitos
 
 ````markdown
 
-- Docker installed on your server (tested on Ubuntu 22.04).
-- A public IP address or domain pointing to your server.
+- Aplicação em Docker testado no Ubuntu 22.04.
+- Um endereço IP público ou domínio apontando para o seu servidor.
 
 ````
 
-## Installation
-1. **Pull the base image**
+## Instalação
+1. **Extraindo a imagem base**
    ```bash
    docker pull docker.io/library/ubuntu:22.04
    ```
-2. **Clone the repository**
+2. **Clonando o repositório**
 
    ```bash
    git clone https://github.com/djdoolky76/o11-v4
    cd o11-v4
    ```
 
-3. **Build the Docker image**
+3. **Criando a imagem**
 
    ```bash
-   sudo docker build -t o11-v4 .
+   docker build -t o11-v4 .
    ```
 
-## Running the Container
+## Rodando o container
 
-Before running the container, decide which server runtime you want to use:
+Antes de executar o contêiner, decida qual ambiente de execução do servidor você deseja usar:
 
-* **Node.js (default)**
+* **Node.js (Padrão)**
 ```
 sudo docker run -d -p 80:80 -p 443:443 -p 5454:5454 -p 8484:8484 -e IP_ADDRESS=SERVER-IP-HERE -e SERVER_TYPE=nodejs --name o11 o11-v4
 ```
 * **Python**
 ```
-sudo docker run -d -p 80:80 -p 443:443 -p 5454:5454 -p 8484:8484 -e IP_ADDRESS=SERVER-IP-HERE-e SERVER_TYPE=python --name o11 o11-v4
+sudo docker run -d -p 80:80 -p 443:443 -p 5454:5454 -p 8484:8484 -e IP_ADDRESS=SERVER-IP-HERE -e SERVER_TYPE=python --name o11 o11-v4
 ```
-**Important:** Replace `SERVER-IP-HERE` with your actual server IP or domain.
+**Importante:** Substitua `SERVER-IP-HERE` pelo endereço IP ou domínio do seu servidor.
 
-## Accessing the Web Panel
+## Acessando o Painel Web
 
-Once the container is running, open your browser and navigate to:
+Assim que o contêiner estiver em execução, abra seu navegador e acesse o:
 
 ```
 http://SERVER-IP-HERE:8484
 ```
 
-**Login credentials:**
+**Credenciais de Acesso:**
+* **Usuário:** `admin`
+* **Senha..:** `admin`
 
-* **Username:** `admin`
-* **Password:** `admin`
-
-## Stopping and Removing the Container
-
+## Comandos para uso do container
 ```bash
-# Stop the container
+# Parar o container
 docker stop o11
 
-# Remove the container
-docker rm o11
+# Remover o container
+docker rm -f o11
+
+# Acesso bash ao container
+docker exec -it o11 /bin/bash
+- CTRL + D (Sair sem Parar o container) -
 ```
 
-## Aknowledgement
+## Reconhecimento
 
-- Mike
-- Pigzilla
-- And You.
+- Este projeto é um fork de https://github.com/djdoolky76/o11-v4. Todo mérito seja dado inicialmente a ele, eu apenas fiz algumas melhorias para meu cenário.
