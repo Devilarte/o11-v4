@@ -12,7 +12,7 @@ const ipAddress = '';
 const portHttp = 80;
 const portHttps = 443;
 
-// Start Express Server
+// Iniciar Servidor
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,16 +32,16 @@ app.use('/', express.static('www'));
 app.post('/lic', (req, res) => {
     console.log('Received POST /lic request');
 
-    // Define the file path
+    // Defina o caminho do arquivo
     const filePath = path.join(__dirname, 'lic.cr');
 
-    // Check if the file exists
+    // Verifique se o arquivo existe
     if (!fs.existsSync(filePath)) {
         console.error('File not found:', filePath);
         return res.status(404).send('File not found');
     }
 
-    // Send the file as a response
+    // Enviar o arquivo como resposta
     res.sendFile(filePath, (err) => {
         if (err) {
             console.error('Error sending file:', err);
@@ -51,7 +51,7 @@ app.post('/lic', (req, res) => {
 });
 
 
-// Generate self-signed certificates if they don't exist
+// Gere certificados autoassinados caso eles não existam
 const certPath = './certs';
 const keyFile = `${certPath}/key.pem`;
 const certFile = `${certPath}/cert.pem`;
@@ -72,7 +72,7 @@ const options = {
     cert: fs.readFileSync(certFile)
 };
 
-// Start HTTP and HTTPS servers
+// Iniciar Servidor em HTTP e HTTPS
 [80, 5454].forEach(port => {
     http.createServer(app).listen(port, () => {
     console.log(`HTTP server running on port ${port}`);
@@ -87,7 +87,7 @@ https.createServer(options, app).listen(portHttps, (err) => {
     }
 });
 
-// Function to update the /etc/hosts file
+// Função para atualizar o arquivo /etc/hosts
 function updateHosts() {
     try {
         let content = fs.readFileSync(hostspath, 'utf8').split('\n');
@@ -108,5 +108,5 @@ function updateHosts() {
     }
 }
 
-// Run tasks
+// Executar tarefas
 updateHosts();
