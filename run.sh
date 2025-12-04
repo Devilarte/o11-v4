@@ -1,29 +1,29 @@
 #!/bin/bash
 
-# Remove old /home/o11 entries from /etc/fstab
+# Remova as entradas antigas de /home/o11 de /etc/fstab
 sed -i '/home\/o11/d' /etc/fstab
 sleep 2
 
-# Append new tmpfs entries to /etc/fstab
+# Adicione novas entradas tmpfs ao arquivo /etc/fstab
 cat <<EOL >> /etc/fstab
 
 tmpfs /home/o11/hls tmpfs defaults,noatime,nosuid,nodev,noexec,mode=1777,size=70% 0 0
 tmpfs /home/o11/dl tmpfs defaults,noatime,nosuid,nodev,noexec,mode=1777,size=70% 0 0
 EOL
 
-# Mount all entries in /etc/fstab
+# Monte todas as entradas em /etc/fstab
 mount -av
 
-# Infinite loop to check if o11 is running
+# Loop infinito para verificar se o11 está em execução
 while true; do
   if ! pgrep "o11v4" > /dev/null; then
-    # Start the o11 process
+    # Iniciando o processo o11
     /home/o11/o11v4 -p 8484 -noramfs -f /usr/bin/ffmpeg -path "/home/o11/" -noautostart -plstreamname "%s [%p]" &
     
-    # Wait before checking again to give the process time to start
+    # Aguardar, antes de reiniciar o processo
     sleep 10
   fi
   
-  # Wait before checking again
+  # Aguardar novamente
   sleep 20
 done
